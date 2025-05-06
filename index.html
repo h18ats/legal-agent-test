@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eleven Labs Conversational Agent</title>
+    <title>Talk to Eleven Labs Agent</title>
 </head>
 <body>
 
@@ -36,34 +36,11 @@
 
             // Check if inputs are not empty
             if(userName && userEmail && userMessage) {
-                // Prepare the payload
-                const payload = {
-                    user_name: userName,
-                    user_email: userEmail,
-                    message: userMessage
-                };
+                // Construct the URL with query parameters
+                const agentUrl = `https://elevenlabs.io/app/talk-to?agent_id=tG9uM0Gz6OeuPuR8BpBI&user_name=${encodeURIComponent(userName)}&user_email=${encodeURIComponent(userEmail)}&message=${encodeURIComponent(userMessage)}`;
 
-                // Send to Eleven Labs Conversational AI Agent API
-                fetch('https://api.elevenlabs.io/agents/tG9uM0Gz6OeuPuR8BpBI/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer YOUR_API_KEY', // Replace with your actual API key
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.response) {
-                        document.getElementById("agent_response").innerText = data.response;
-                    } else {
-                        document.getElementById("agent_response").innerText = "Sorry, there was an issue with the request.";
-                    }
-                })
-                .catch(error => {
-                    document.getElementById("agent_response").innerText = "Error sending data to the agent.";
-                    console.error(error); // For debugging
-                });
+                // Redirect the user to the agent URL
+                window.location.href = agentUrl;
             } else {
                 alert("Please fill in all fields.");
             }
