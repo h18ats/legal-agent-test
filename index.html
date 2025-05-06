@@ -167,7 +167,7 @@
     });
 
     // Function to display a message in the chat box
-    function displayMessage(sender, message, userName, userEmail) {
+    function displayMessage(sender, userName, userEmail, message) {
         const chatBox = document.getElementById('chat-box');
         const messageElement = document.createElement('div');
         messageElement.classList.add('message');
@@ -183,13 +183,13 @@
     }
 
     // Function to append conversation to the transcript
-    function appendToTranscript(sender, message) {
+    function appendToTranscript(sender, userName, userEmail, message) {
         const transcriptContent = document.getElementById('transcript-content');
         const messageElement = document.createElement('div');
         messageElement.classList.add('transcript-message');
 
         if (sender === 'User') {
-            messageElement.innerHTML = `<span class="user-message">User:</span> ${message}`;
+            messageElement.innerHTML = `<span class="user-message">${userName} (${userEmail}):</span> ${message}`;
         } else {
             messageElement.innerHTML = `<span class="agent-response">Agent:</span> ${message}`;
         }
