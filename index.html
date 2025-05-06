@@ -153,17 +153,17 @@
         }
 
         // Display user's message in the chat box
-        displayMessage('User', userName, userEmail);
+        displayMessage('User', userName, userEmail, 'Starting the conversation...');
 
         // Send API request to Eleven Labs agent and get the response
         const response = await startConversationWithAgent(userName, userEmail);
 
         // Display agent's response in the chat box
-        displayMessage('Agent', response);
+        displayMessage('Agent', 'Legal Engine', '', response);
 
         // Append the conversation to the transcript
-        appendToTranscript('User', userName, userEmail);
-        appendToTranscript('Agent', response);
+        appendToTranscript('User', userName, userEmail, 'Starting the conversation...');
+        appendToTranscript('Agent', 'Legal Engine', '', response);
     });
 
     // Function to display a message in the chat box
