@@ -1,117 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Legal Engine | Interview Agent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Engine Interview</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f6f9;
-      margin: 0;
-      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      justify-content: center;
+      padding: 2rem;
     }
-
-    h1 {
-      margin-top: 40px;
-      font-size: 2rem;
-      color: #333;
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
     }
-
-    .form-card {
-      background: #fff;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      margin-top: 20px;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #333;
-    }
-
     input {
       width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    button {
-      width: 100%;
       padding: 12px;
-      background-color: #004aad;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #0047ab;
       color: white;
-      font-size: 1rem;
-      font-weight: 600;
+      padding: 12px 20px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      margin-top: 10px;
     }
-
     button:hover {
-      background-color: #003b8a;
+      background-color: #003a8c;
     }
-
     #agent-container {
-      margin-top: 40px;
-      width: 100%;
-      max-width: 700px;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h2>Start Legal Engine Interview</h2>
+    <p>Please enter your name and email to begin:</p>
+    <input type="text" id="user_name" placeholder="Your Name" />
+    <input type="email" id="user_email" placeholder="Your Email" />
+    <button onclick="startInterview()">Start Interview</button>
 
-  <h1>Legal Engine Voice Interview</h1>
-
-  <div class="form-card">
-    <form id="user-form">
-      <label for="name">Your Name</label>
-      <input type="text" id="name" name="name" placeholder="Jane Smith" required>
-
-      <label for="email">Your Email</label>
-      <input type="email" id="email" name="email" placeholder="jane@example.com" required>
-
-      <button type="submit">Start Interview</button>
-    </form>
+    <div id="agent-container"></div>
   </div>
 
-  <div id="agent-container"></div>
-
-  <!-- Eleven Labs Widget Loader -->
-  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
-
   <script>
-    document.getElementById('user-form').addEventListener('submit', function (e) {
-      e.preventDefault();
+    function startInterview() {
+      const name = document.getElementById("user_name").value;
+      const email = document.getElementById("user_email").value;
 
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const container = document.getElementById('agent-container');
+      if (!name || !email) {
+        alert("Please enter both your name and email.");
+        return;
+      }
 
-      // Clear any existing agent
-      container.innerHTML = '';
+      // Inject the script only after button click
+      const widget = document.createElement("elevenlabs-convai");
+      widget.setAttribute("agent-id", "tG9uM0Gz6OeuPuR8BpBI");
+      widget.setAttribute("user_name", name);
+      widget.setAttribute("user_email", email);
 
-      // Create and configure agent
-      const agent = document.createElement('elevenlabs-convai');
-      agent.setAttribute('agent-id', 'tG9uM0Gz6OeuPuR8BpBI');
-      agent.setAttribute('user_name', name);
-      agent.setAttribute('user_email', email);
+      const container = document.getElementById("agent-container");
+      container.innerHTML = ""; // Clear previous instances if any
+      container.appendChild(widget);
 
-      container.appendChild(agent);
-    });
+      const script = document.createElement("script");
+      script.src = "https://elevenlabs.io/convai-widget/index.js";
+      script.async = true;
+      script.type = "text/javascript";
+      document.body.appendChild(script);
+    }
   </script>
 </body>
 </html>
