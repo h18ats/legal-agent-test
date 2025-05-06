@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversational AI Agent</title>
+    <title>Activate Conversational AI Agent</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,113 +15,54 @@
             height: 100vh;
             background-color: #f4f4f4;
         }
-        .chat-container {
-            width: 100%;
-            max-width: 600px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 80%;
-            max-height: 700px;
-        }
-        .chat-box {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        .chat-box p {
-            margin: 5px 0;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        .user-message {
-            background-color: #e0e0e0;
-            text-align: right;
-        }
-        .ai-message {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .input-container {
-            display: flex;
-        }
-        #user-input {
-            flex-grow: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-left: 10px;
-        }
-        button:hover {
-            background-color: #0056b3;
+        .loading {
+            font-size: 20px;
+            color: #007bff;
         }
     </style>
 </head>
 <body>
 
-    <div class="chat-container">
-        <div class="chat-box" id="chat-box"></div>
-        <div class="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button onclick="sendMessage()">Send</button>
-        </div>
+    <div class="loading" id="loading-message">
+        Activating your AI agent, please wait...
     </div>
 
     <script>
         const apiUrl = "https://elevenlabs.io/app/talk-to?agent_id=tG9uM0Gz6OeuPuR8BpBI";
 
-        function sendMessage() {
-            const userMessage = document.getElementById('user-input').value;
-            if (!userMessage) return;
+        // Example variables
+        const user_name = "John Doe";
+        const user_email = "john.doe@example.com";
 
-            // Display user message in the chat box
-            appendMessage('You: ' + userMessage, 'user-message');
+        // Function to trigger the API call and initialize the agent
+        function initializeAgent() {
+            // Update the loading message while waiting for the API to respond
+            document.getElementById('loading-message').textContent = "AI agent is being activated...";
 
-            // Clear input field
-            document.getElementById('user-input').value = '';
-
-            // Call the Eleven Labs API
+            // Call the Eleven Labs API with user details
             fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: userMessage
+                    user_name: user_name,
+                    user_email: user_email
                 })
             })
             .then(response => response.json())
             .then(data => {
-                // Display AI's response
-                appendMessage('AI: ' + data.reply, 'ai-message');
+                console.log("Agent initialized:", data);
+                document.getElementById('loading-message').textContent = "AI agent activated successfully!";
             })
             .catch(error => {
-                console.error('Error:', error);
-                appendMessage('AI: Sorry, there was an error processing your request.', 'ai-message');
+                console.error("Error initializing agent:", error);
+                document.getElementById('loading-message').textContent = "Error activating AI agent. Please try again.";
             });
         }
 
-        function appendMessage(message, messageClass) {
-            const chatBox = document.getElementById('chat-box');
-            const messageElement = document.createElement('p');
-            messageElement.textContent = message;
-            messageElement.classList.add(messageClass);
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
-        }
+        // Initialize the agent when the page loads
+        window.onload = initializeAgent;
     </script>
 
 </body>
