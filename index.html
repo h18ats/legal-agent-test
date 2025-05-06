@@ -3,142 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal Engine - Chat with Agent</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f8;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #3498db;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-
-        input[type="text"], input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0 20px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-
-        .chat-box {
-            background-color: #ecf0f1;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .message {
-            margin-bottom: 15px;
-        }
-
-        .user-message {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .agent-response {
-            color: #16a085;
-        }
-    </style>
+    <title>Eleven Labs Agent Integration</title>
 </head>
 <body>
 
-<div class="container">
-    <h1>Legal Engine - Chat with Agent</h1>
+    <h2>Contact Eleven Labs Agent</h2>
 
-    <!-- User Inputs -->
-    <label for="user_name">Your Name:</label>
-    <input type="text" id="user_name" placeholder="Enter your name" required>
+    <form id="agentForm">
+        <label for="user_name">Name:</label>
+        <input type="text" id="user_name" name="user_name" required><br><br>
 
-    <label for="user_email">Your Email:</label>
-    <input type="email" id="user_email" placeholder="Enter your email" required>
+        <label for="user_email">Email:</label>
+        <input type="email" id="user_email" name="user_email" required><br><br>
 
-    <button id="startChatBtn">Start Conversation</button>
+        <button type="submit">Send to Agent</button>
+    </form>
 
-    <!-- Chat Box to display conversation -->
-    <div class="chat-box" id="chat-box"></div>
-</div>
+    <script>
+        document.getElementById("agentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-<script>
-    // Function to start conversation with agent
-    document.getElementById('startChatBtn').addEventListener('click', async () => {
-        const userName = document.getElementById('user_name').value;
-        const userEmail = document.getElementById('user_email').value;
+            // Retrieve user input
+            const userName = document.getElementById("user_name").value;
+            const userEmail = document.getElementById("user_email").value;
 
-        if (!userName || !userEmail) {
-            alert('Please fill out both fields');
-            return;
-        }
-
-        // Display user's message in the chat box
-        displayMessage('User', userName, userEmail, 'Starting the conversation...');
-
-        // Simulate a response from the agent (as API call is not configured)
-        const response = 'Hello ' + userName + '! How can I help you with your legal matter?';
-
-        // Display agent's response in the chat box
-        displayMessage('Agent', 'Legal Engine', '', response);
-    });
-
-    // Function to display a message in the chat box
-    function displayMessage(sender, userName, userEmail, message) {
-        const chatBox = document.getElementById('chat-box');
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
-
-        if (sender === 'User') {
-            messageElement.innerHTML = `<span class="user-message">${userName} (${userEmail}):</span> ${message}`;
-        } else {
-            messageElement.innerHTML = `<span class="agent-response">Agent:</span> ${message}`;
-        }
-
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
-    }
-</script>
+            // Check if inputs are not empty
+            if(userName && userEmail) {
+                // Send to Eleven Labs Agent API
+                fetch('https://api.elevenlabs.io/agents/tG9uM0Gz6OeuPuR8BpBI', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_API_KEY', // Replace with your actual API key
+                    },
+                    body: JSON.stringify({
+                        user_name: userName,
+                        user_email: userEmail
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Data sent successfully to the agent.");
+                    console.log(data); // For debugging
+                })
+                .catch(error => {
+                    alert("Error sending data to the agent.");
+                    console.error(error); // For debugging
+                });
+            } else {
+                alert("Please fill in both fields.");
+            }
+        });
+    </script>
 
 </body>
 </html>
