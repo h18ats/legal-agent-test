@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Legal Engine Agent Test</title>
+</head>
+<body>
+  <h1>Legal Engine Test Agent</h1>
+  <form id="user-form">
+    <label for="name">Your Name:</label><br>
+    <input type="text" id="name" name="name"><br><br>
+    
+    <label for="email">Your Email:</label><br>
+    <input type="email" id="email" name="email"><br><br>
+    
+    <button type="submit">Start Agent</button>
+  </form>
+
+  <div id="agent-container" style="margin-top: 20px;"></div>
+
+  <script>
+    document.getElementById('user-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      // Insert your Eleven Labs embed code here
+      // Example (replace with real agent):
+      const agentEmbed = `
+        <iframe src="https://your-eleven-labs-agent-url?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}"
+                width="100%" height="600px" frameborder="0"></iframe>
+      `;
+
+      document.getElementById('agent-container').innerHTML = agentEmbed;
+    });
+  </script>
+</body>
+</html>
