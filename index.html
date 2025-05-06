@@ -59,4 +59,31 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message:
+                    message: userMessage
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Append the AI's response
+                appendMessage('AI: ' + data.reply);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                appendMessage('AI: Sorry, there was an error processing your request.');
+            });
+
+            // Clear input field
+            document.getElementById('user-input').value = '';
+        }
+
+        function appendMessage(message) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        }
+    </script>
+
+</body>
+</html>
