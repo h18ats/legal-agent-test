@@ -3,46 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Talk to Eleven Labs Agent</title>
+    <title>Conversational AI with Eleven Labs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #chat-box {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
-    <h2>Talk to Eleven Labs Agent</h2>
+    <h1>Chat with AI Agent</h1>
 
-    <form id="agentForm">
-        <label for="user_name">Name:</label>
-        <input type="text" id="user_name" name="user_name" required><br><br>
+    <div id="chat-box"></div>
 
-        <label for="user_email">Email:</label>
-        <input type="email" id="user_email" name="user_email" required><br><br>
-
-        <label for="user_message">Message:</label>
-        <textarea id="user_message" name="user_message" rows="4" cols="50" required></textarea><br><br>
-
-        <button type="submit">Send Message</button>
-    </form>
+    <input type="text" id="user-input" placeholder="Type your message here..." />
+    <button onclick="sendMessage()">Send</button>
 
     <script>
-        document.getElementById("agentForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+        const apiUrl = "https://elevenlabs.io/app/talk-to?agent_id=tG9uM0Gz6OeuPuR8BpBI";
 
-            // Retrieve user input
-            const userName = document.getElementById("user_name").value;
-            const userEmail = document.getElementById("user_email").value;
-            const userMessage = document.getElementById("user_message").value;
+        function sendMessage() {
+            const userMessage = document.getElementById('user-input').value;
+            if (!userMessage) return;
 
-            // Check if inputs are not empty
-            if(userName && userEmail && userMessage) {
-                // Construct the URL with query parameters
-                const agentUrl = `https://elevenlabs.io/app/talk-to?agent_id=tG9uM0Gz6OeuPuR8BpBI&user_name=${encodeURIComponent(userName)}&user_email=${encodeURIComponent(userEmail)}&message=${encodeURIComponent(userMessage)}`;
+            // Display user message in the chat box
+            appendMessage('You: ' + userMessage);
 
-                // Redirect the user to the agent URL
-                window.location.href = agentUrl;
-            } else {
-                alert("Please fill in all fields.");
-            }
-        });
-    </script>
-
-</body>
-</html>
+            // Call the Eleven Labs API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message:
