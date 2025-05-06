@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eleven Labs Agent Integration</title>
+    <title>Eleven Labs Conversational Agent</title>
 </head>
 <body>
 
-    <h2>Contact Eleven Labs Agent</h2>
+    <h2>Talk to Eleven Labs Agent</h2>
 
     <form id="agentForm">
         <label for="user_name">Name:</label>
@@ -16,8 +16,14 @@
         <label for="user_email">Email:</label>
         <input type="email" id="user_email" name="user_email" required><br><br>
 
-        <button type="submit">Send to Agent</button>
+        <label for="user_message">Message:</label>
+        <textarea id="user_message" name="user_message" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="submit">Send Message</button>
     </form>
+
+    <h3>Agent Response:</h3>
+    <div id="agent_response"></div>
 
     <script>
         document.getElementById("agentForm").addEventListener("submit", function(event) {
@@ -26,32 +32,40 @@
             // Retrieve user input
             const userName = document.getElementById("user_name").value;
             const userEmail = document.getElementById("user_email").value;
+            const userMessage = document.getElementById("user_message").value;
 
             // Check if inputs are not empty
-            if(userName && userEmail) {
-                // Send to Eleven Labs Agent API
-                fetch('https://api.elevenlabs.io/agents/tG9uM0Gz6OeuPuR8BpBI', {
+            if(userName && userEmail && userMessage) {
+                // Prepare the payload
+                const payload = {
+                    user_name: userName,
+                    user_email: userEmail,
+                    message: userMessage
+                };
+
+                // Send to Eleven Labs Conversational AI Agent API
+                fetch('https://api.elevenlabs.io/agents/tG9uM0Gz6OeuPuR8BpBI/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer YOUR_API_KEY', // Replace with your actual API key
                     },
-                    body: JSON.stringify({
-                        user_name: userName,
-                        user_email: userEmail
-                    })
+                    body: JSON.stringify(payload)
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert("Data sent successfully to the agent.");
-                    console.log(data); // For debugging
+                    if (data && data.response) {
+                        document.getElementById("agent_response").innerText = data.response;
+                    } else {
+                        document.getElementById("agent_response").innerText = "Sorry, there was an issue with the request.";
+                    }
                 })
                 .catch(error => {
-                    alert("Error sending data to the agent.");
+                    document.getElementById("agent_response").innerText = "Error sending data to the agent.";
                     console.error(error); // For debugging
                 });
             } else {
-                alert("Please fill in both fields.");
+                alert("Please fill in all fields.");
             }
         });
     </script>
