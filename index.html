@@ -6,32 +6,40 @@
 </head>
 <body>
   <h1>Legal Engine Test Agent</h1>
+
   <form id="user-form">
     <label for="name">Your Name:</label><br>
-    <input type="text" id="name" name="name"><br><br>
-    
+    <input type="text" id="name" name="name" required><br><br>
+
     <label for="email">Your Email:</label><br>
-    <input type="email" id="email" name="email"><br><br>
-    
+    <input type="email" id="email" name="email" required><br><br>
+
     <button type="submit">Start Agent</button>
   </form>
 
-  <div id="agent-container" style="margin-top: 20px;"></div>
+  <div id="agent-container" style="margin-top: 30px;"></div>
+
+  <!-- Eleven Labs Widget Loader -->
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 
   <script>
     document.getElementById('user-form').addEventListener('submit', function(e) {
       e.preventDefault();
+
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
 
-      // Insert your Eleven Labs embed code here
-      // Example (replace with real agent):
-      const agentEmbed = `
-        <iframe src="https://your-eleven-labs-agent-url?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}"
-                width="100%" height="600px" frameborder="0"></iframe>
-      `;
+      // Remove previous agent if it exists
+      const container = document.getElementById('agent-container');
+      container.innerHTML = '';
 
-      document.getElementById('agent-container').innerHTML = agentEmbed;
+      // Create agent element dynamically
+      const agent = document.createElement('elevenlabs-convai');
+      agent.setAttribute('agent-id', 'tG9uM0Gz6OeuPuR8BpBI');
+      agent.setAttribute('user_name', name);
+      agent.setAttribute('user_email', email);
+
+      container.appendChild(agent);
     });
   </script>
 </body>
