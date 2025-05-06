@@ -14,7 +14,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 600px;
             margin: 50px auto;
             background: white;
             padding: 25px;
@@ -42,7 +42,6 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
-            box-sizing: border-box;
         }
 
         button {
@@ -83,38 +82,6 @@
         .agent-response {
             color: #16a085;
         }
-
-        .transcript-box {
-            margin-top: 40px;
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .transcript-header {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .transcript-content {
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 10px;
-            background-color: #f7f7f7;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .transcript-message {
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .transcript-message span {
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -133,12 +100,6 @@
 
     <!-- Chat Box to display conversation -->
     <div class="chat-box" id="chat-box"></div>
-
-    <!-- Transcript Section -->
-    <div class="transcript-box">
-        <div class="transcript-header">Conversation Transcript</div>
-        <div class="transcript-content" id="transcript-content"></div>
-    </div>
 </div>
 
 <script>
@@ -155,15 +116,11 @@
         // Display user's message in the chat box
         displayMessage('User', userName, userEmail, 'Starting the conversation...');
 
-        // Send API request to Eleven Labs agent and get the response
-        const response = await startConversationWithAgent(userName, userEmail);
+        // Simulate a response from the agent (as API call is not configured)
+        const response = 'Hello ' + userName + '! How can I help you with your legal matter?';
 
         // Display agent's response in the chat box
         displayMessage('Agent', 'Legal Engine', '', response);
-
-        // Append the conversation to the transcript
-        appendToTranscript('User', userName, userEmail, 'Starting the conversation...');
-        appendToTranscript('Agent', 'Legal Engine', '', response);
     });
 
     // Function to display a message in the chat box
@@ -180,47 +137,6 @@
 
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
-    }
-
-    // Function to append conversation to the transcript
-    function appendToTranscript(sender, userName, userEmail, message) {
-        const transcriptContent = document.getElementById('transcript-content');
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('transcript-message');
-
-        if (sender === 'User') {
-            messageElement.innerHTML = `<span class="user-message">${userName} (${userEmail}):</span> ${message}`;
-        } else {
-            messageElement.innerHTML = `<span class="agent-response">Agent:</span> ${message}`;
-        }
-
-        transcriptContent.appendChild(messageElement);
-        transcriptContent.scrollTop = transcriptContent.scrollHeight; // Scroll to bottom
-    }
-
-    // Function to call Eleven Labs API and get the agent response
-    async function startConversationWithAgent(userName, userEmail) {
-        const apiUrl = 'https://api.elevenlabs.io/agent/chat'; // Replace with actual API URL
-        const agentId = 'tG9uM0Gz6OeuPuR8BpBI'; // Your Eleven Labs agent ID
-
-        const requestData = {
-            agent_id: agentId,
-            user_name: userName,
-            user_email: userEmail,
-            message: 'Hello, I need help with a legal matter.' // Example user input
-        };
-
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer YOUR_API_KEY' // Replace with your actual API key
-            },
-            body: JSON.stringify(requestData)
-        });
-
-        const responseData = await response.json();
-        return responseData.response || 'Sorry, something went wrong.';
     }
 </script>
 
