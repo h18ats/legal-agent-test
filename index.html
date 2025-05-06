@@ -3,33 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Legal Engine Interview</title>
+  <title>Legal Engine | Start Interview</title>
   <style>
     body {
+      margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f9;
+      background-color: #f4f7fb;
+      color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
-    .container {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      max-width: 500px;
+
+    header {
       width: 100%;
+      background-color: #002855;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .container {
+      margin-top: 4rem;
+      background-color: white;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      width: 90%;
       text-align: center;
     }
+
+    .container h2 {
+      margin-bottom: 1rem;
+      color: #002855;
+    }
+
     input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
+      font-size: 16px;
     }
+
     button {
       background-color: #0047ab;
       color: white;
@@ -38,52 +60,74 @@
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 20px;
+      width: 100%;
     }
+
     button:hover {
-      background-color: #003a8c;
+      background-color: #003a91;
     }
+
     #agent-container {
       margin-top: 2rem;
+    }
+
+    .logo {
+      margin-bottom: 1.5rem;
+    }
+
+    .logo img {
+      height: 60px;
     }
   </style>
 </head>
 <body>
+  <header>
+    Legal Engine
+  </header>
+
   <div class="container">
-    <h2>Start Legal Engine Interview</h2>
-    <p>Please enter your name and email to begin:</p>
+    <div class="logo">
+      <img src="https://via.placeholder.com/160x60?text=Legal+Engine+Logo" alt="Legal Engine Logo"/>
+    </div>
+    <h2>Start Your Conversation</h2>
+    <p>Please enter your details below to begin:</p>
     <input type="text" id="user_name" placeholder="Your Name" />
     <input type="email" id="user_email" placeholder="Your Email" />
-    <button onclick="startInterview()">Start Interview</button>
+    <button onclick="startInterview()">Start Conversation</button>
 
     <div id="agent-container"></div>
   </div>
 
+  <!-- ElevenLabs Widget Script -->
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+
   <script>
     function startInterview() {
-      const name = document.getElementById("user_name").value;
-      const email = document.getElementById("user_email").value;
+      const name = document.getElementById("user_name").value.trim();
+      const email = document.getElementById("user_email").value.trim();
 
       if (!name || !email) {
-        alert("Please enter both your name and email.");
+        alert("Please enter both your name and email to continue.");
         return;
       }
 
-      // Inject the script only after button click
+      const container = document.getElementById("agent-container");
+      container.innerHTML = ""; // Clear if already added
+
       const widget = document.createElement("elevenlabs-convai");
       widget.setAttribute("agent-id", "tG9uM0Gz6OeuPuR8BpBI");
-      widget.setAttribute("user_name", name);
-      widget.setAttribute("user_email", email);
-
-      const container = document.getElementById("agent-container");
-      container.innerHTML = ""; // Clear previous instances if any
       container.appendChild(widget);
 
-      const script = document.createElement("script");
-      script.src = "https://elevenlabs.io/convai-widget/index.js";
-      script.async = true;
-      script.type = "text/javascript";
-      document.body.appendChild(script);
+      const interval = setInterval(() => {
+        if (window.elevenlabs && window.elevenlabs.setCustomVariables) {
+          window.elevenlabs.setCustomVariables({
+            user_name: name,
+            user_email: email
+          });
+          clearInterval(interval);
+        }
+      }, 200);
     }
   </script>
 </body>
