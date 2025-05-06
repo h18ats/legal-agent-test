@@ -2,38 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Legal Engine Agent Test</title>
+  <title>Legal Engine | Interview Agent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .form-card {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-top: 20px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #004aad;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #003b8a;
+    }
+
+    #agent-container {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 700px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Legal Engine Test Agent</h1>
 
-  <form id="user-form">
-    <label for="name">Your Name:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+  <h1>Legal Engine Voice Interview</h1>
 
-    <label for="email">Your Email:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+  <div class="form-card">
+    <form id="user-form">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Jane Smith" required>
 
-    <button type="submit">Start Agent</button>
-  </form>
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="jane@example.com" required>
 
-  <div id="agent-container" style="margin-top: 30px;"></div>
+      <button type="submit">Start Interview</button>
+    </form>
+  </div>
+
+  <div id="agent-container"></div>
 
   <!-- Eleven Labs Widget Loader -->
   <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 
   <script>
-    document.getElementById('user-form').addEventListener('submit', function(e) {
+    document.getElementById('user-form').addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-
-      // Remove previous agent if it exists
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
       const container = document.getElementById('agent-container');
+
+      // Clear any existing agent
       container.innerHTML = '';
 
-      // Create agent element dynamically
+      // Create and configure agent
       const agent = document.createElement('elevenlabs-convai');
       agent.setAttribute('agent-id', 'tG9uM0Gz6OeuPuR8BpBI');
       agent.setAttribute('user_name', name);
